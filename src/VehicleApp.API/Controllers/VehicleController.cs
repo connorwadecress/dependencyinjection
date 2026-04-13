@@ -17,6 +17,7 @@ public class VehicleController : ControllerBase
     private readonly LogVehicleAppService _logService;
     private readonly IVehicleLogger _logger;
 
+    private readonly IAuditService _auditService;
 
     // CONSTRUCTOR INJECTION — the DI container provides all 4 app services
     public VehicleController(
@@ -26,7 +27,9 @@ public class VehicleController : ControllerBase
         DeleteVehicleAppService deleteService,
 
         LogVehicleAppService logService,
-        IVehicleLogger logger)
+        IVehicleLogger logger,
+
+        IAuditService auditService)
     {
         _createService = createService;
         _getAllService = getAllService;
@@ -35,6 +38,9 @@ public class VehicleController : ControllerBase
 
         _logService = logService;
         _logger = logger;
+
+        // PROPERTY INJECTION — we set the optional dependency on the service after it was constructed
+        _createService.AuditService = auditService;
     }
 
     [HttpPost]

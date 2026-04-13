@@ -3,7 +3,7 @@ using VehicleApp.Application.Interfaces;
 using VehicleApp.Domain.Interfaces;
 using VehicleApp.Infrastructure.Logging;
 using VehicleApp.Infrastructure.Repositories;
-
+using VehicleApp.Infrastructure.Audit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +25,9 @@ builder.Services.AddScoped<UpdateVehicleAppService>();
 builder.Services.AddScoped<DeleteVehicleAppService>();
 builder.Services.AddTransient<IVehicleLogger, ConsoleVehicleLogger>();
 builder.Services.AddScoped<LogVehicleAppService>();
+
+// TRANSIENT
+builder.Services.AddTransient<IAuditService, ConsoleAuditService>();
 
 
 // -------------------------------------------

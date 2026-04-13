@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using VehicleApp.Application.Interfaces;
 using VehicleApp.Domain.Entities;
 using VehicleApp.Domain.Interfaces;
 
@@ -10,7 +8,11 @@ public class CreateVehicleAppService
 {
     private readonly IVehicleRepository _repository;
 
-    // CONSTRUCTOR INJECTION - the dependency is required and immutable
+    // PROPERTY INJECTION — optional dependency, set after construction
+    // If nothing sets this, it stays null and the service still works fine
+    public IAuditService? AuditService { get; set; }
+
+    // Constructor injection for the required dependency
     public CreateVehicleAppService(IVehicleRepository repository)
     {
         _repository = repository;
@@ -20,6 +22,10 @@ public class CreateVehicleAppService
     {
         vehicle.Id = Guid.NewGuid();
         _repository.Add(vehicle);
+
+        // Only audits if AuditService was provided — otherwise skips silently
+        AuditService?.Audit("CreateVehicle", $"Created vehicle {vehicle.Make} {vehicle.Model} with Id {vehicle.Id}");
+
         return vehicle;
     }
 }
