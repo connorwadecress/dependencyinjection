@@ -23,12 +23,12 @@ builder.Services.AddScoped<CreateVehicleAppService>();
 builder.Services.AddScoped<GetAllVehiclesAppService>();
 builder.Services.AddScoped<UpdateVehicleAppService>();
 builder.Services.AddScoped<DeleteVehicleAppService>();
-builder.Services.AddTransient<IVehicleLogger, ConsoleVehicleLogger>();
 builder.Services.AddScoped<LogVehicleAppService>();
 
-// TRANSIENT
+// TRANSIENT — a new instance every time it's requested 
+// For simple logging and auditing, we don't need to maintain any state, so transient is fine
 builder.Services.AddTransient<IAuditService, ConsoleAuditService>();
-
+builder.Services.AddTransient<IVehicleLogger, ConsoleVehicleLogger>();
 
 // -------------------------------------------
 
