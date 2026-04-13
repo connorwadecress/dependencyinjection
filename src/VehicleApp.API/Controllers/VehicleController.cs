@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VehicleApp.Application.AppServices;
+using VehicleApp.Application.Interfaces;
 using VehicleApp.Domain.Entities;
 
 namespace VehicleApp.API.Controllers;
@@ -13,17 +14,27 @@ public class VehicleController : ControllerBase
     private readonly UpdateVehicleAppService _updateService;
     private readonly DeleteVehicleAppService _deleteService;
 
+    private readonly LogVehicleAppService _logService;
+    private readonly IVehicleLogger _logger;
+
+
     // CONSTRUCTOR INJECTION — the DI container provides all 4 app services
     public VehicleController(
         CreateVehicleAppService createService,
         GetAllVehiclesAppService getAllService,
         UpdateVehicleAppService updateService,
-        DeleteVehicleAppService deleteService)
+        DeleteVehicleAppService deleteService,
+
+        LogVehicleAppService logService,
+        IVehicleLogger logger)
     {
         _createService = createService;
         _getAllService = getAllService;
         _updateService = updateService;
         _deleteService = deleteService;
+
+        _logService = logService;
+        _logger = logger;
     }
 
     [HttpPost]
@@ -54,4 +65,13 @@ public class VehicleController : ControllerBase
         _deleteService.Execute(id);
         return NoContent();
     }
+
+    // METHOD INJECTION — the logger is passed into the method, not stored on the service
+    [HttpGet("logged")]
+    public IActionResult GetAllWithLog()
+    {
+        var vehicles = _logService.GetAllAndLog(_logger);
+        return Ok(vehicles);
+    }
+
 }
