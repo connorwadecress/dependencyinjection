@@ -5,7 +5,14 @@ namespace VehicleApp.Infrastructure.Repositories;
 
 public class InMemoryVehicleRepository : IVehicleRepository
 {
-    private readonly List<Vehicle> _vehicles = new List<Vehicle>();
+    //private readonly List<Vehicle> _vehicles = new List<Vehicle>(); - more concise 
+
+    private readonly List<Vehicle> _vehicles;
+
+    public InMemoryVehicleRepository()
+    {
+        _vehicles = new List<Vehicle>();
+    }
 
     public Vehicle? GetById(Guid id)
     {

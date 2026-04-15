@@ -6,7 +6,7 @@ namespace VehicleApp.Application.AppServices;
 
 public class CreateVehicleAppService
 {
-    private readonly IVehicleRepository _repository;
+    private readonly IVehicleRepository _repository; 
 
     // PROPERTY INJECTION — optional dependency, set after construction
     // If nothing sets this, it stays null and the service still works fine
