@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IVehicleRepository, InMemoryVehicleRepository>();
 
 // SCOPED one instance per HTTP request
-// App services are stateless (they hold no data), so scoped is the right choice here
+// App services are stateless (they hold no data)
 builder.Services.AddScoped<CreateVehicleAppService>();
 builder.Services.AddScoped<GetAllVehiclesAppService>();
 builder.Services.AddScoped<UpdateVehicleAppService>();
