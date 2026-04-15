@@ -11,7 +11,7 @@ namespace VehicleApp.API.Controllers;
 public class ReflectionDemoController : ControllerBase
 {
     // Scan an assembly to find all types that implement IVehicleRepository
-    // This is how a DI container can auto-discover implementations
+    // auto discover impelemtnation (like how DI does it)
     [HttpGet("implementations")]
     public IActionResult FindImplementations()
     {
@@ -32,7 +32,7 @@ public class ReflectionDemoController : ControllerBase
     }
 
     // Inspect the constructor of CreateVehicleAppService
-    // This is exactly what the DI container reads to know what to inject
+    // constructors and paramters (needed for DI)
     [HttpGet("constructor")]
     public IActionResult InspectConstructor()
     {
@@ -51,7 +51,7 @@ public class ReflectionDemoController : ControllerBase
     }
 
     // Inspect injectable properties on CreateVehicleAppService
-    // Shows how the container could discover property injection candidates
+    // how container discovers property inkection for AuditService
     [HttpGet("properties")]
     public IActionResult InspectProperties()
     {
@@ -70,21 +70,21 @@ public class ReflectionDemoController : ControllerBase
     }
 
     // Manually simulate what the DI container does using reflection
-    // No DI container involved — we do it ourselves step by step
+    // this is if we didnt use program.cs to do DI container
     [HttpGet("simulate-resolution")]
     public IActionResult SimulateResolution()
     {
-        // Step 1 — find the constructor
+        //find the constructor
         var serviceType = typeof(CreateVehicleAppService);
         var constructor = serviceType.GetConstructors().First();
 
-        // Step 2 — create the dependency the constructor needs
+        //create the dependency the constructor needs
         var repository = new InMemoryVehicleRepository();
 
-        // Step 3 — invoke the constructor with the dependency (this is what Invoke does)
+        //invoke the constructor with the dependency
         var service = (CreateVehicleAppService)constructor.Invoke(new object[] { repository });
 
-        // Step 4 — find the property and set it (simulates property injection)
+        //find the property and set it - this is property injection
         var auditProperty = serviceType.GetProperty(nameof(CreateVehicleAppService.AuditService));
         auditProperty?.SetValue(service, new ConsoleAuditService());
 
